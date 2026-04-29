@@ -685,7 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Share an activity using the Web Share API or a fallback share modal
   function shareActivity(name, description, schedule) {
-    const shareText = `Check out "${name}" at Mergington High School!\n${description}\nSchedule: ${schedule}`;
+    const shareText = `Check out "${name}" at Mergington High School! ${description} Schedule: ${schedule}`;
     const shareUrl = window.location.href;
 
     if (navigator.share) {
@@ -754,10 +754,12 @@ document.addEventListener("DOMContentLoaded", () => {
     copyFeedback.classList.add("hidden");
 
     copyButton.onclick = () => {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        copyFeedback.classList.remove("hidden");
-        setTimeout(() => copyFeedback.classList.add("hidden"), 2000);
-      }).catch(() => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          copyFeedback.classList.remove("hidden");
+          setTimeout(() => copyFeedback.classList.add("hidden"), 2000);
+        });
+      } else {
         // Fallback for older browsers
         const tempInput = document.createElement("input");
         tempInput.value = shareUrl;
@@ -767,7 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.removeChild(tempInput);
         copyFeedback.classList.remove("hidden");
         setTimeout(() => copyFeedback.classList.add("hidden"), 2000);
-      });
+      }
     };
 
     shareModal.classList.remove("hidden");
