@@ -454,17 +454,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Apply difficulty filter
-      if (currentDifficulty === "") {
-        // "All" option: show only activities with no difficulty specified
-        if (details.difficulty) {
-          return;
-        }
-      } else {
+      if (currentDifficulty !== "") {
         // Specific difficulty: show only activities matching that level
         if (details.difficulty !== currentDifficulty) {
           return;
         }
       }
+      // When "All" is selected (currentDifficulty === ""), show all activities
 
       // Activity passed all filters, add to filtered list
       filteredActivities[name] = details;
